@@ -1,0 +1,28 @@
+export const seedAds = [
+  {
+    id: 1,
+    title: "MacBook Pro 2023",
+    description: "Excellent condition, barely used MacBook Pro with M2 chip",
+    price: 1299.99,
+    category: "Electronics",
+    location: "New York",
+    date: "2024-01-15",
+    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=1200&q=80",
+    seller: "John Doe",
+    contact: "+1 (234) 567-890",
+    owner: "someone",
+  },
+  {
+    id: 2,
+    title: "Mountain Bike",
+    description: "Professional mountain bike, perfect condition",
+    price: 599.99,
+    category: "Sports",
+    location: "Denver",
+    date: "2024-01-13",
+    image: "https://images.unsplash.com/photo-1576435728678-68d0fbf94e91?w=1200&q=80",
+    seller: "Mike W",
+    contact: "+1 (122) 334-455",
+    owner: "someone",
+  },
+];

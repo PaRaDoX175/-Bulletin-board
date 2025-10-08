@@ -1,4 +1,5 @@
 
+using System.Security.Cryptography.X509Certificates;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,9 +17,15 @@ public class AdsRepository : IAdsRepository
         await _context.SaveChangesAsync();
     }
 
-    public Task DeleteAd(string adId)
+    public async Task DeleteAd(string adId, string userId)
     {
-        throw new NotImplementedException();
+        var ad = await _context.Ads.Where(x => x.Id.ToString() == adId && x.UserId == userId).FirstOrDefaultAsync();
+
+        if (ad != null)
+        {
+            _context.Ads.Remove(ad);
+            await _context.SaveChangesAsync();
+        }
     }
 
     public async Task<List<Ad>> FindAllAds()
@@ -41,10 +48,11 @@ public class AdsRepository : IAdsRepository
         return SpecificationEvaluator<Ad>.GetQuery(_context.Ads, specification);
     }
 
-    public async Task<int> GetCount(string search, string category = "")
+    public async Task<int> GetCount(string search, string category, string userId)
     {
         return await _context.Ads
             .Where(x => (string.IsNullOrEmpty(search) || x.Title.ToLower().Contains(search) || x.Description.ToLower().Contains(search))
-            && (string.IsNullOrEmpty(category) || x.Category == category)).CountAsync();
+            && (string.IsNullOrEmpty(category) || x.Category == category)
+            && (string.IsNullOrEmpty(userId) || x.UserId == userId)).CountAsync();
     }
 }

@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.jsx'
 import ProfileComponent from './components/ProfileComponent.jsx'
 import AuthenticateComponent from "./components/AuthenticateComponent.jsx";
+import {ModalProvider} from "./contexts/ModalContext.jsx";
 
 const router = createBrowserRouter([
     { path: '/', element: <App/> },
@@ -12,7 +13,11 @@ const router = createBrowserRouter([
 ])
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <RouterProvider router={router}/>
-  </StrictMode>,
+
+      <StrictMode>
+          <ModalProvider>
+            <RouterProvider router={router}/>
+          </ModalProvider>
+      </StrictMode>,
+
 )

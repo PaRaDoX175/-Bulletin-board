@@ -1,10 +1,20 @@
 import {Menu, User, Plus } from "lucide-react";
-import { Link } from 'react-router-dom'
-import CreateAdModal from "./CreateAdModal.jsx";
-import React, {useState} from "react";
+import {Link, useNavigate} from 'react-router-dom'
+import React, {useContext} from "react";
+import {ModalContext} from "../contexts/ModalContext.jsx";
+import {isJwtValid} from "../utils/isJwtValid.js";
 
-export default function Header({ setShowAuthentication, openCreate }) {
+export default function Header() {
+    const { openCreate } = useContext(ModalContext)
+    const { openAuthentication } = useContext(ModalContext)
+    const navigate = useNavigate()
 
+    const checkToken = () => {
+        const isValid = isJwtValid(localStorage.getItem('accessToken'))
+        if (isValid) {
+            navigate('/profile')
+        }
+    }
 
     return (
     <header className="bg-white shadow fixed top-0 left-0 w-full">
@@ -15,20 +25,14 @@ export default function Header({ setShowAuthentication, openCreate }) {
         </div>
 
         <div className="hidden md:flex items-center gap-3 text-gray-700">
-          {/*<button className="px-3 py-1 rounded hover:bg-gray-100" onClick={() => setActiveTab("home")}>Home</button>*/}
-          {/*<button className="px-3 py-1 rounded hover:bg-gray-100" onClick={() => setActiveTab("myads")}>My Ads</button>*/}
           <button onClick={openCreate} className="bg-blue-600 text-white px-3 py-1 rounded flex items-center gap-2">
             <Plus />Create
           </button>
           <div className="p-2" >
-              {/*<Link to={'/authentication'}><User /></Link>*/}
               {localStorage.getItem('displayName') !== null ? (
-                  <Link to={'/profile'}>
-                      <div className="w-8 h-8 bg-blue-600 text-white rounded grid place-items-center font-bold">{localStorage.getItem('displayName')[0]}</div>
-                  </Link>
-
+                  <div onClick={checkToken} className="w-8 h-8 bg-blue-600 text-white rounded grid place-items-center font-bold">{localStorage.getItem('displayName')[0]}</div>
               ) : (
-                <User onClick={() => setShowAuthentication(true)} />
+                <User onClick={openAuthentication} />
               )}
               </div>
         </div>
@@ -37,7 +41,6 @@ export default function Header({ setShowAuthentication, openCreate }) {
           <Menu />
         </div>
       </div>
-
     </header>
   );
 }

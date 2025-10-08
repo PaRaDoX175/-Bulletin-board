@@ -77,26 +77,10 @@ public class AccountController : ControllerBase
 
     [Authorize]
     [HttpGet("user_info")]
-    public async Task<ActionResult<UserInfoDto>> GetUserInfo()
+    public async Task<ActionResult<AppUser>> GetUserInfo()
     {
         var claims = HttpContext.User;
-        var user = await _userManager.FindByEmailAsync(claims.FindFirstValue(ClaimTypes.Email));
 
-        if (user == null) return NotFound("User is not found");
-
-        return new UserInfoDto
-        {
-            DisplayName = user.DisplayName,
-            Email = user.Email,
-            PictureUrl = user.PictureUrl
-        };
-    }
-
-    [Authorize]
-    [HttpGet("ur")]
-    public async Task<AppUser> ggg()
-    {
-        var claims = HttpContext.User;
         return await _userRepository.GetUserWithAds(claims.FindFirstValue(ClaimTypes.NameIdentifier));
     }
 

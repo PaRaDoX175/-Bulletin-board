@@ -1,7 +1,7 @@
 import Header from "./Header.jsx";
 import {useState} from "react";
 
-export default function AuthenticateComponent({ setShowAuthentication }) {
+export default function AuthenticateComponent({ onClose }) {
     const [reg, setReg] = useState(true);
     const [regForm, setRegForm] = useState({
         displayName: "",
@@ -27,7 +27,7 @@ export default function AuthenticateComponent({ setShowAuthentication }) {
                 const user = await response.json();
                 localStorage.setItem('accessToken', user.accessToken)
                 localStorage.setItem('displayName', user.displayName)
-                setShowAuthentication(false)
+                onClose()
             }
         }
     }
@@ -45,7 +45,7 @@ export default function AuthenticateComponent({ setShowAuthentication }) {
                 const user = await response.json();
                 localStorage.setItem('accessToken', user.accessToken)
                 localStorage.setItem('displayName', user.displayName)
-                setShowAuthentication(false)
+                onClose()
             }
         }
     }
@@ -54,6 +54,7 @@ export default function AuthenticateComponent({ setShowAuthentication }) {
     return (
         <div className="fixed inset-0 bg-black/40 grid place-items-center p-4 z-40">
             <div className="bg-white rounded-lg w-full max-w-120 h-120 p-6 text-gray-700">
+                <button className="px-4 py-2 rounded border text-gray-700 mb-2" onClick={onClose}>Exit</button>
                 <div className="flex justify-around items-center mb-5">
                     <button className="p-2 w-[45%] bg-amber-100" onClick={() => setReg(true)}>Registration</button>
                     <button className="p-2 w-[45%] bg-amber-100" onClick={() => setReg(false)}>Login</button>

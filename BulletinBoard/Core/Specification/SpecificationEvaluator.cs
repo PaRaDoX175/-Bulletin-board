@@ -6,7 +6,7 @@ public class SpecificationEvaluator<T> where T : class
     {
         var query = input;
 
-        query = query.Skip(spec.Skip).Take(spec.Take);
+
 
         if (spec.Criteria != null)
         {
@@ -24,6 +24,8 @@ public class SpecificationEvaluator<T> where T : class
         }
 
         query = spec.Include.Aggregate(query, (current, include) => current.Include(include));
+
+        query = query.Skip(spec.Skip).Take(spec.Take);
 
         return query;
     }

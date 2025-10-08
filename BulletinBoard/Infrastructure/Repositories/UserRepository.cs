@@ -13,6 +13,7 @@ public class UserRepository : IUserRepository
 
     public async Task<AppUser> GetUserWithAds(string userId)
     {
-        return await _userManager.Users.Include(x => x.Ads).FirstOrDefaultAsync(x => x.Id == userId);
+        var user = await _userManager.Users.Include(x => x.Ads).FirstOrDefaultAsync(x => x.Id == userId);
+        return user ?? null;
     }
 }

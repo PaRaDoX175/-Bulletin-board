@@ -1,8 +1,19 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Phone, Mail, Trash2 } from "lucide-react";
+import {jwtDecode} from "jwt-decode";
 
 export default function AdCard({ ad, onDelete }) {
   const [showContact, setShowContact] = useState(false);
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+      const token = localStorage.getItem('accessToken')
+      if (token) {
+          const decoded = jwtDecode(token)
+          setUserId(decoded.nameid)
+      }
+      else setUserId('')
+  }, [])
 
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden flex flex-col text-gray-700">
@@ -30,13 +41,10 @@ export default function AdCard({ ad, onDelete }) {
             <button onClick={() => setShowContact(true)} className="bg-green-600 text-white px-3 py-1 rounded flex items-center gap-2">
               <Phone size={14} />Contact
             </button>
-            <button className="bg-gray-100 px-3 py-1 rounded flex items-center gap-2 text-gray-700">
-              <Mail size={14} />Message
-            </button>
           </div>
 
           <div className="flex items-center gap-2">
-            {ad.owner === "me" && (
+            {ad.userId === userId && (
               <button onClick={() => onDelete(ad.id)} className="text-red-500 hover:text-red-700 p-2 rounded">
                 <Trash2 />
               </button>

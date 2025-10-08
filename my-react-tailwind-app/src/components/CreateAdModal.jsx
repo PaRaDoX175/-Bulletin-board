@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { categories } from "../data/categories";
 
-export default function CreateAdModal({ onClose, setAds }) {
+export default function CreateAdModal({ onClose, onAdCreated }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -33,6 +33,7 @@ export default function CreateAdModal({ onClose, setAds }) {
     }
 
     await addAdToDb(ad)
+    if (onAdCreated) onAdCreated();
     onClose()
   };
 
@@ -48,21 +49,19 @@ export default function CreateAdModal({ onClose, setAds }) {
       }
 
       try {
-          const request = await fetch(baseUrl + '/ads/add', {
+          await fetch(baseUrl + '/ads/add', {
               method: "POST",
               headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem("accessToken")}`},
               body: JSON.stringify(adToDb)
           })
 
-          const data = await request.json();
-          setAds(s => [data, ...s]);
       } catch {
           console.log('smth went wrong')
       }
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 grid place-items-center p-4 z-40">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white rounded-lg w-full max-w-2xl p-6 text-gray-700">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-gray-800">Create ad</h2>
@@ -120,6 +119,6 @@ export default function CreateAdModal({ onClose, setAds }) {
           </div>
         </form>
       </div>
-    </div>
+      </div>
   );
 }

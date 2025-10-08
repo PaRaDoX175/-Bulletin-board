@@ -18,7 +18,7 @@ public class JWTService : IJWTService
         _configuration = configuration;
         _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]));
     }
-    
+
     public string GenerateToken(AppUser user)
     {
         var claims = new List<Claim>
@@ -27,7 +27,7 @@ public class JWTService : IJWTService
             new Claim(ClaimTypes.Name, user.DisplayName),
             new Claim(ClaimTypes.Email, user.Email)
         };
-        
+
         var creds = new SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha512Signature);
 
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -40,7 +40,7 @@ public class JWTService : IJWTService
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        
+
         return tokenHandler.WriteToken(token);
     }
 }

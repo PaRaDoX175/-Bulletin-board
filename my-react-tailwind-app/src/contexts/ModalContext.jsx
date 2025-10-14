@@ -11,7 +11,6 @@ export const ModalProvider = ({ children }) => {
     const [showAuthentication, setShowAuthentication] = useState(false);
     const [onAdCreated, setOnAdCreated] = useState(null);
 
-
     useEffect(() => {
         modalController.setOpenAuthModal(() => setShowAuthentication(true))
     }, [])
@@ -24,6 +23,7 @@ export const ModalProvider = ({ children }) => {
             openAuthentication()
         }
     };
+
     const closeCreate = () => setShowCreate(false);
     const openAuthentication = () => setShowAuthentication(true);
     const closeAuthentication = () => setShowAuthentication(false);

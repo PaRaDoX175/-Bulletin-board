@@ -11,6 +11,7 @@ import {getDataWithInterceptor, getDataWithoutInterceptor} from "./utils/request
 import Pagination from "./components/Pagination.jsx";
 import {checkJwt} from "./utils/isJwtValid.js";
 import api from "./interceptors/tokenValidity.interceptor.jsx";
+import AdListComponent from "./components/AdListComponent.jsx";
 
 export default function App() {
   const [ads, setAds] = useState([]);
@@ -67,7 +68,6 @@ export default function App() {
 
   const removeAd = async (adId) => {
     if (!confirm("Delete ad?")) return;
-    // setAds((s) => s.filter((a) => a.id !== id));
     await api.delete(`${baseUrl}/ads/delete_ad?adId=${adId}`)
     setPagination({...pagination})
   };
@@ -159,19 +159,12 @@ export default function App() {
                       </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {ads.length === 0 ? (
-                          <div className="col-span-full text-center py-12 text-gray-600 bg-white rounded shadow">
-                          No ads found.
-                      </div>
-                      ) : (
-                          ads.map((ad) => (
-                              <AdCard key={ad.id} ad={ad} onDelete={() => removeAd(ad.id)}/>
-                          ))
-                      )}
-                  </div>
-
-                  <Pagination pagination={pagination} setPagination={setPagination} totalCount={totalCount}></Pagination>
+                  <AdListComponent
+                      ads={ads}
+                      removeAd={removeAd}
+                      pagination={pagination}
+                      setPagination={setPagination}
+                      totalCount={totalCount}></AdListComponent>
 
               </section>
 

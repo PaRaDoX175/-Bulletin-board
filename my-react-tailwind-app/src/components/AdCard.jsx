@@ -55,7 +55,7 @@ export default function AdCard({ ad, onDelete }) {
       </div>
 
       {showContact && (
-        <div className="fixed inset-0 bg-black/50 grid place-items-center p-4">
+        <div className="fixed inset-0 bg-black/50 grid place-items-center p-4 z-60">
           <div className="bg-white rounded p-4 max-w-sm w-full text-gray-700">
             <h3 className="font-semibold text-gray-800">Contact seller</h3>
             <p className="mt-2">{ad.seller}</p>

@@ -8,7 +8,7 @@ public class Ad : BaseEntity
     public string Category { get; set; }
     public string Location { get; set; }
     public string Contact { get; set; }
-    public string Image { get; set; } = string.Empty;
+    public string Image { get; set; }
     public DateTime Date { get; set; } = DateTime.UtcNow;
     public string UserId { get; set; }
 }

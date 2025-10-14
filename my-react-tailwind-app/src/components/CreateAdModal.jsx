@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { categories } from "../data/categories";
+import {fileToDataUrl} from "../utils/fileToDataUrl.js";
 
 export default function CreateAdModal({ onClose, onAdCreated }) {
   const [title, setTitle] = useState("");
@@ -9,7 +10,7 @@ export default function CreateAdModal({ onClose, onAdCreated }) {
   const [location, setLocation] = useState("");
   const [contact, setContact] = useState("");
   const [imageFile, setImageFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState(null);
   const baseUrl = 'http://localhost:5197/api'
 
   const fileRef = useRef();
@@ -21,6 +22,12 @@ export default function CreateAdModal({ onClose, onAdCreated }) {
       return;
     }
 
+    let img;
+
+    if (imageUrl === null && imageFile === null) img = null;
+    else if (imageUrl === null) img = imageFile;
+    else img = imageUrl;
+
     const ad = {
         title,
         description,
@@ -28,14 +35,22 @@ export default function CreateAdModal({ onClose, onAdCreated }) {
         category,
         location,
         contact,
-        imageFile,
-        imageUrl: imageUrl || null,
+        imageUrl: img,
     }
+
+    console.log(ad);
 
     await addAdToDb(ad)
     if (onAdCreated) onAdCreated();
     onClose()
   };
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setImageFile(await fileToDataUrl(file));
+    };
 
   const addAdToDb = async (ad) => {
 
@@ -45,7 +60,8 @@ export default function CreateAdModal({ onClose, onAdCreated }) {
           price: ad.price,
           category: ad.category,
           location: ad.location,
-          contact: ad.contact
+          contact: ad.contact,
+          image: ad.imageUrl,
       }
 
       try {
@@ -108,8 +124,8 @@ export default function CreateAdModal({ onClose, onAdCreated }) {
           <div>
             <label className="block text-sm font-medium mb-1 text-gray-700">Picture (file) or URL</label>
             <div className="flex gap-2 items-center">
-              <input type="file" ref={fileRef} onChange={(e) => setImageFile(e.target.files?.[0] || null)} className="border rounded px-2 py-1 text-gray-700" />
-              <input placeholder="https://..." value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="flex-1 border rounded px-3 py-2 text-gray-700" />
+              <input type="file" ref={fileRef} onChange={(e) => handleFileChange(e)} className="border rounded px-2 py-1 text-gray-700" />
+              <input placeholder="https://..." value={imageUrl === null ? '' : imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="flex-1 border rounded px-3 py-2 text-gray-700" />
             </div>
           </div>
 

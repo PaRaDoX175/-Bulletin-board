@@ -1,7 +1,12 @@
 import Header from "./Header.jsx";
 import {useState} from "react";
+import {useMantineColorScheme} from "@mantine/core";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function AuthenticateComponent({ onClose }) {
+    const { colorScheme } = useMantineColorScheme();
+    const dark = colorScheme === "dark";
+
     const [reg, setReg] = useState(true);
     const [regForm, setRegForm] = useState({
         displayName: "",
@@ -54,97 +59,147 @@ export default function AuthenticateComponent({ onClose }) {
 
     return (
 
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 relative animate-fade-in">
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
+        <AnimatePresence>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm grid place-items-center z-50 p-4"
+            >
+                <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className={`w-full max-w-md p-6 rounded-2xl shadow-2xl ${
+                        dark ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"
+                    }`}
                 >
-                    ✕
-                </button>
-
-                <div className="flex mb-8 bg-gray-100 rounded-xl overflow-hidden">
                     <button
-                        onClick={() => setReg(false)}
-                        className={`flex-1 py-2.5 text-lg font-medium transition ${
-                            !reg ? "bg-blue-600 text-white" : "text-gray-600 hover:bg-gray-200"
-                        }`}
+                        onClick={onClose}
+                        className={`mb-4 px-3 py-1 rounded-md border ${
+                            dark ? "border-gray-600 hover:bg-gray-700" : "border-gray-300 hover:bg-gray-100"
+                        } transition-colors`}
                     >
-                        Login
+                        Exit
                     </button>
-                    <button
-                        onClick={() => setReg(true)}
-                        className={`flex-1 py-2.5 text-lg font-medium transition ${
-                            reg ? "bg-blue-600 text-white" : "text-gray-600 hover:bg-gray-200"
-                        }`}
-                    >
-                        Registration
-                    </button>
-                </div>
 
-                <div className="space-y-5">
-                    {reg ? (
-                        <form className="flex flex-col gap-4" onSubmit={submitRegForm}>
-                            <input
-                                type="text"
-                                placeholder="Display name"
-                                className="w-full px-4 py-3 border rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition"
-                                onChange={(e) =>
-                                    setRegForm({ ...regForm, displayName: e.target.value })
-                                }
-                            />
-                            <input
-                                type="email"
-                                placeholder="Email"
-                                className="w-full px-4 py-3 border rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition"
-                                onChange={(e) =>
-                                    setRegForm({ ...regForm, email: e.target.value })
-                                }
-                            />
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                className="w-full px-4 py-3 border rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition"
-                                onChange={(e) =>
-                                    setRegForm({ ...regForm, password: e.target.value })
-                                }
-                            />
-                            <button
-                                type="submit"
-                                className="w-full py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition shadow-md"
-                            >
-                                Sign up
-                            </button>
-                        </form>
-                    ) : (
-                        <form className="flex flex-col gap-4" onSubmit={submitLoginForm}>
-                            <input
-                                type="email"
-                                placeholder="Email"
-                                className="w-full px-4 py-3 border rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition"
-                                onChange={(e) =>
-                                    setLoginForm({ ...loginForm, email: e.target.value })
-                                }
-                            />
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                className="w-full px-4 py-3 border rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition"
-                                onChange={(e) =>
-                                    setLoginForm({ ...loginForm, password: e.target.value })
-                                }
-                            />
-                            <button
-                                type="submit"
-                                className="w-full py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition shadow-md"
-                            >
-                                Log in
-                            </button>
-                        </form>
-                    )}
-                </div>
-            </div>
-        </div>
+                    <div className="flex justify-between mb-6 gap-2">
+                        <button
+                            onClick={() => setReg(true)}
+                            className={`flex-1 py-2 rounded-lg font-semibold transition-colors ${
+                                reg
+                                    ? "bg-blue-600 text-white shadow-md"
+                                    : dark
+                                        ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                            }`}
+                        >
+                            Registration
+                        </button>
+                        <button
+                            onClick={() => setReg(false)}
+                            className={`flex-1 py-2 rounded-lg font-semibold transition-colors ${
+                                !reg
+                                    ? "bg-blue-600 text-white shadow-md"
+                                    : dark
+                                        ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                            }`}
+                        >
+                            Login
+                        </button>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                        {reg ? (
+                            <form className="flex flex-col gap-4" onSubmit={submitRegForm}>
+                                <input
+                                    type="text"
+                                    placeholder="Display name"
+                                    value={regForm.displayName}
+                                    onChange={(e) =>
+                                        setRegForm({ ...regForm, displayName: e.target.value })
+                                    }
+                                    className={`p-3 rounded-lg border ${
+                                        dark
+                                            ? "bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-100 focus:border-blue-500"
+                                            : "bg-gray-100 border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-500"
+                                    } outline-none transition-colors`}
+                                />
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    value={regForm.email}
+                                    onChange={(e) =>
+                                        setRegForm({ ...regForm, email: e.target.value })
+                                    }
+                                    className={`p-3 rounded-lg border ${
+                                        dark
+                                            ? "bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-100 focus:border-blue-500"
+                                            : "bg-gray-100 border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-500"
+                                    } outline-none transition-colors`}
+                                />
+                                <input
+                                    type="password"
+                                    placeholder="Password"
+                                    value={regForm.password}
+                                    onChange={(e) =>
+                                        setRegForm({ ...regForm, password: e.target.value })
+                                    }
+                                    className={`p-3 rounded-lg border ${
+                                        dark
+                                            ? "bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-100 focus:border-blue-500"
+                                            : "bg-gray-100 border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-500"
+                                    } outline-none transition-colors`}
+                                />
+                                <button
+                                    type="submit"
+                                    className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+                                >
+                                    Register
+                                </button>
+                            </form>
+                        ) : (
+                            <form className="flex flex-col gap-4" onSubmit={submitLoginForm}>
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    value={loginForm.email}
+                                    onChange={(e) =>
+                                        setLoginForm({ ...loginForm, email: e.target.value })
+                                    }
+                                    className={`p-3 rounded-lg border ${
+                                        dark
+                                            ? "bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-100 focus:border-blue-500"
+                                            : "bg-gray-100 border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-500"
+                                    } outline-none transition-colors`}
+                                />
+                                <input
+                                    type="password"
+                                    placeholder="Password"
+                                    value={loginForm.password}
+                                    onChange={(e) =>
+                                        setLoginForm({ ...loginForm, password: e.target.value })
+                                    }
+                                    className={`p-3 rounded-lg border ${
+                                        dark
+                                            ? "bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-100 focus:border-blue-500"
+                                            : "bg-gray-100 border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-500"
+                                    } outline-none transition-colors`}
+                                />
+                                <button
+                                    type="submit"
+                                    className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+                                >
+                                    Login
+                                </button>
+                            </form>
+                        )}
+                    </div>
+                </motion.div>
+            </motion.div>
+        </AnimatePresence>
 
     )
 }

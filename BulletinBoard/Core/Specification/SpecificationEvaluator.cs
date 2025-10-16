@@ -6,8 +6,6 @@ public class SpecificationEvaluator<T> where T : class
     {
         var query = input;
 
-
-
         if (spec.Criteria != null)
         {
             query = query.Where(spec.Criteria);

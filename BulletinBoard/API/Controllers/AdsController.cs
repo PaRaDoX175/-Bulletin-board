@@ -31,9 +31,11 @@ public class AdsController : ControllerBase
     [FromQuery] int pageSize = 6,
     [FromQuery] string search = "",
     [FromQuery] string sort = "",
-    [FromQuery] string category = "")
+    [FromQuery] string category = "",
+    [FromQuery] double? minPrice = null,
+    [FromQuery] double? maxPrice = null)
     {
-        return await GetAdsWithSpec(pageIndex, pageSize, search, sort, category, true);
+        return await GetAdsWithSpec(pageIndex, pageSize, search, sort, category, minPrice, maxPrice, true);
     }
 
     [AllowAnonymous]
@@ -43,9 +45,11 @@ public class AdsController : ControllerBase
     [FromQuery] int pageSize = 6,
     [FromQuery] string search = "",
     [FromQuery] string sort = "",
-    [FromQuery] string category = "")
+    [FromQuery] string category = "",
+    [FromQuery] double? minPrice = null,
+    [FromQuery] double? maxPrice = null)
     {
-        return await GetAdsWithSpec(pageIndex, pageSize, search, sort, category, false);
+        return await GetAdsWithSpec(pageIndex, pageSize, search, sort, category, minPrice, maxPrice, false);
     }
 
     [HttpDelete("delete_ad")]
@@ -61,6 +65,8 @@ public class AdsController : ControllerBase
         string search,
         string sort,
         string category,
+        double? minPrice,
+        double? maxPrice,
         bool isMine
     )
     {
@@ -78,6 +84,8 @@ public class AdsController : ControllerBase
             Search = search,
             Sort = sort,
             Category = category == "All" ? "" : category,
+            MinPrice = minPrice,
+            MaxPrice = maxPrice,
             UserId = userId
         };
 
@@ -85,7 +93,7 @@ public class AdsController : ControllerBase
 
         var ads = await _adsRepository.GetAdsWithSpec(adsWithSpec);
 
-        var count = await _adsRepository.GetCount(search, category == "All" ? "" : category, userId);
+        var count = await _adsRepository.GetCount(search, category == "All" ? "" : category, userId, minPrice, maxPrice);
 
         return new Pagination<Ad>(pageSize, pageIndex, count, ads);
     }

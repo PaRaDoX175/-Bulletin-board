@@ -6,5 +6,7 @@ public class AdsSpecParams
     public string Sort { get; set; }
     public string Category { get; set; }
     public string Search { get => _search; set => _search = value.ToLower(); }
+    public double? MinPrice { get; set; }
+    public double? MaxPrice { get; set; }
     public string UserId { get; set; } = string.Empty;
 }

@@ -51,6 +51,7 @@ export default function AuthenticateComponent({ onClose }) {
                 const user = await response.json();
                 localStorage.setItem('accessToken', user.accessToken)
                 localStorage.setItem('displayName', user.displayName)
+                if (user.pictureUrl !== null) localStorage.setItem('pictureUrl', user.pictureUrl)
                 onClose()
             }
         }

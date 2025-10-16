@@ -18,6 +18,12 @@ public class BaseSpecification<T> : ISpecification<T>
     public int Take { get; private set; }
     public int Skip { get; private set; }
 
+    // public Expression<Func<T, bool>> MinPrice { get; private set; }
+    // public Expression<Func<T, bool>> MaxPrice { get; private set; }
+
+    // protected void AddMinPrice(Expression<Func<T, bool>> priceExpression) => MinPrice = priceExpression;
+    // protected void AddMaxPrice(Expression<Func<T, bool>> priceExpression) => MaxPrice = priceExpression;
+
     protected void AddInclude(Expression<Func<T, object>> includeExpression) => Include.Add(includeExpression);
     protected void AddOrderBy(Expression<Func<T, object>> orderByExpression) => OrderBy = orderByExpression;
     protected void AddOrderByDesc(Expression<Func<T, object>> orderByDescExpression)

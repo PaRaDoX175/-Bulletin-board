@@ -54,19 +54,29 @@ export default function Header({ saveOpenCreate }) {
                     </button>
 
                     <div>
-                        {localStorage.getItem("displayName") ? (
+                        {localStorage.getItem("pictureUrl") ? (
                             <div
                                 onClick={checkToken}
                                 className="w-8 h-8 bg-blue-600 text-white rounded-full grid place-items-center font-bold cursor-pointer hover:scale-105 transition-transform duration-200"
                             >
-                                {localStorage.getItem("displayName")[0]}
+                                <img src={localStorage.getItem('pictureUrl')} alt="" className="rounded-full"/>
                             </div>
                         ) : (
-                            <User
-                                onClick={openAuthentication}
-                                className="cursor-pointer hover:text-blue-600 transition-colors duration-200"
-                            />
+                            localStorage.getItem("displayName") ? (
+                                <div
+                                    onClick={checkToken}
+                                    className="w-8 h-8 bg-blue-600 text-white rounded-full grid place-items-center font-bold cursor-pointer hover:scale-105 transition-transform duration-200"
+                                >
+                                    {localStorage.getItem("displayName")[0]}
+                                </div>
+                            ) : (
+                                <User
+                                    onClick={openAuthentication}
+                                    className="cursor-pointer hover:text-blue-600 transition-colors duration-200"
+                                />
+                            )
                         )}
+
                     </div>
                 </div>
 

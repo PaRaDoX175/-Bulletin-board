@@ -70,7 +70,8 @@ public class AccountController : ControllerBase
         {
             Email = login.Email,
             DisplayName = user.DisplayName,
-            AccessToken = _jwtService.GenerateToken(user)
+            AccessToken = _jwtService.GenerateToken(user),
+            PictureUrl = !string.IsNullOrEmpty(user.PictureUrl) ? user.PictureUrl : null
         };
     }
 

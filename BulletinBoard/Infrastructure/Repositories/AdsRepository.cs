@@ -48,11 +48,13 @@ public class AdsRepository : IAdsRepository
         return SpecificationEvaluator<Ad>.GetQuery(_context.Ads, specification);
     }
 
-    public async Task<int> GetCount(string search, string category, string userId)
+    public async Task<int> GetCount(string search, string category, string userId, double? minPrice, double? maxPrice)
     {
         return await _context.Ads
             .Where(x => (string.IsNullOrEmpty(search) || x.Title.ToLower().Contains(search) || x.Description.ToLower().Contains(search))
             && (string.IsNullOrEmpty(category) || x.Category == category)
-            && (string.IsNullOrEmpty(userId) || x.UserId == userId)).CountAsync();
+            && (string.IsNullOrEmpty(userId) || x.UserId == userId)
+            && (minPrice == null || x.Price >= minPrice)
+            && (maxPrice == null || x.Price <= maxPrice)).CountAsync();
     }
 }

@@ -47,6 +47,7 @@ export default function ProfileComponent() {
     const logout = () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("displayName");
+        localStorage.removeItem("pictureUrl");
         window.location.href = "/";
     };
 
@@ -236,6 +237,7 @@ export default function ProfileComponent() {
                                 setPagination={setPagination}
                                 removeAd={removeAd}
                                 totalCount={totalCount}
+                                isMine={true}
                             />
                         </div>
                     </section>
@@ -277,7 +279,7 @@ export default function ProfileComponent() {
                                             : "text-gray-700 hover:bg-gray-100"
                                 }`}
                             >
-                                URL
+                                File
                             </button>
                             <button
                                 onClick={() => setIsUrl(false)}
@@ -291,7 +293,7 @@ export default function ProfileComponent() {
                                             : "text-gray-700 hover:bg-gray-100"
                                 }`}
                             >
-                                File
+                                Url
                             </button>
                         </div>
 

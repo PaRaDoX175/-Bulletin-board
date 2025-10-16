@@ -27,6 +27,8 @@ export default function App() {
       search: '',
       category: categories[0],
       sort: '',
+      minPrice: '',
+      maxPrice: ''
   })
   const [isMine, setIsMine] = useState(false)
 
@@ -41,7 +43,9 @@ export default function App() {
           pageSize: params.pageSize ?? 6,
           search: params.search ?? "",
           sort: params.sort ?? "",
-          category: params.category ?? ""
+          category: params.category ?? "",
+          minPrice: Number(params.minPrice) || '',
+          maxPrice: Number(params.maxPrice) || '',
       })
 
       try {
@@ -83,7 +87,9 @@ export default function App() {
           pageSize: 6,
           search: '',
           category: categories[0],
-          sort: ''
+          sort: '',
+          minPrice: '',
+          maxPrice: '',
       })
   }
 
@@ -131,8 +137,8 @@ export default function App() {
                       <input
                           type="number"
                           placeholder="min"
-                          value={minPrice}
-                          onChange={(e) => setMinPrice(e.target.value)}
+                          value={pagination.minPrice}
+                          onChange={(e) => setPagination({...pagination, minPrice: e.target.value})}
                           className={`w-1/2 px-2 py-1 rounded border text-sm ${
                               dark
                                   ? "bg-gray-700 border-gray-600 text-gray-200"
@@ -142,8 +148,8 @@ export default function App() {
                       <input
                           type="number"
                           placeholder="max"
-                          value={maxPrice}
-                          onChange={(e) => setMaxPrice(e.target.value)}
+                          value={pagination.maxPrice}
+                          onChange={(e) => setPagination({...pagination, maxPrice: e.target.value})}
                           className={`w-1/2 px-2 py-1 rounded border text-sm ${
                               dark
                                   ? "bg-gray-700 border-gray-600 text-gray-200"
@@ -237,34 +243,13 @@ export default function App() {
                       </div>
                   </div>
 
-                  <AnimatePresence mode="popLayout">
-                      <motion.div
-                          key={`${pagination.pageIndex}-${isMine}-${pagination.category}`}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -20 }}
-                          transition={{ duration: 0.3 }}
-                          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-                      >
-                          {ads.length === 0 ? (
-                              <div
-                                  className={`col-span-full text-center py-12 rounded-md shadow ${
-                                      dark ? "bg-gray-800 text-gray-400" : "bg-white text-gray-600"
-                                  }`}
-                              >
-                                  No ads found.
-                              </div>
-                          ) : (
-                              ads.map((ad) => <AdCard key={ad.id} ad={ad} onDelete={() => removeAd(ad.id)} />)
-                          )}
-                      </motion.div>
-                  </AnimatePresence>
-
-                  <Pagination
+                  <AdListComponent
+                      ads={ads}
                       pagination={pagination}
                       setPagination={setPagination}
+                      removeAd={removeAd}
                       totalCount={totalCount}
-                  />
+                      isMine={isMine}></AdListComponent>
               </section>
           </div>
 

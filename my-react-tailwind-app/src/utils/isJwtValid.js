@@ -6,6 +6,7 @@ export function isJwtValid(token) {
     if (decoded.exp < Date.now() / 1000) {
         localStorage.removeItem('displayName')
         localStorage.removeItem('accessToken')
+        localStorage.removeItem('pictureUrl')
         modalController.openAuthModal()
         return false
     }

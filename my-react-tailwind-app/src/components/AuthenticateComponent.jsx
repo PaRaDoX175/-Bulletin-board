@@ -2,61 +2,15 @@ import Header from "./Header.jsx";
 import {useState} from "react";
 import {useMantineColorScheme} from "@mantine/core";
 import { motion, AnimatePresence } from "framer-motion";
+import {useForm} from "react-hook-form";
+import RegistrationForm from "./Forms/RegistrationForm.jsx";
+import LoginForm from "./Forms/LoginForm.jsx";
 
 export default function AuthenticateComponent({ onClose }) {
     const { colorScheme } = useMantineColorScheme();
     const dark = colorScheme === "dark";
 
     const [reg, setReg] = useState(true);
-    const [regForm, setRegForm] = useState({
-        displayName: "",
-        email: "",
-        password: "",
-    })
-    const [loginForm, setLoginForm] = useState({
-        email: '',
-        password: ''
-    })
-    const baseUrl = 'http://localhost:5197/api/account'
-
-
-    const submitRegForm = async (e) => {
-        e.preventDefault();
-        if (regForm.displayName !== "" && regForm.email !== "" && regForm.password !== "") {
-            const response = await fetch(baseUrl + '/register', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(regForm)
-            })
-
-            if (response.ok) {
-                const user = await response.json();
-                localStorage.setItem('accessToken', user.accessToken)
-                localStorage.setItem('displayName', user.displayName)
-                onClose()
-            }
-        }
-    }
-
-    const submitLoginForm = async (e) => {
-        e.preventDefault();
-        if (loginForm.email !== "" && loginForm.password !== "") {
-            const response = await fetch(baseUrl + '/login', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(loginForm)
-            })
-
-            if (response.ok) {
-                const user = await response.json();
-                localStorage.setItem('accessToken', user.accessToken)
-                localStorage.setItem('displayName', user.displayName)
-                if (user.pictureUrl !== null) localStorage.setItem('pictureUrl', user.pictureUrl)
-                onClose()
-            }
-        }
-    }
-
 
     return (
 
@@ -114,88 +68,9 @@ export default function AuthenticateComponent({ onClose }) {
 
                     <div className="flex flex-col gap-4">
                         {reg ? (
-                            <form className="flex flex-col gap-4" onSubmit={submitRegForm}>
-                                <input
-                                    type="text"
-                                    placeholder="Display name"
-                                    value={regForm.displayName}
-                                    onChange={(e) =>
-                                        setRegForm({ ...regForm, displayName: e.target.value })
-                                    }
-                                    className={`p-3 rounded-lg border ${
-                                        dark
-                                            ? "bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-100 focus:border-blue-500"
-                                            : "bg-gray-100 border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-500"
-                                    } outline-none transition-colors`}
-                                />
-                                <input
-                                    type="email"
-                                    placeholder="Email"
-                                    value={regForm.email}
-                                    onChange={(e) =>
-                                        setRegForm({ ...regForm, email: e.target.value })
-                                    }
-                                    className={`p-3 rounded-lg border ${
-                                        dark
-                                            ? "bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-100 focus:border-blue-500"
-                                            : "bg-gray-100 border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-500"
-                                    } outline-none transition-colors`}
-                                />
-                                <input
-                                    type="password"
-                                    placeholder="Password"
-                                    value={regForm.password}
-                                    onChange={(e) =>
-                                        setRegForm({ ...regForm, password: e.target.value })
-                                    }
-                                    className={`p-3 rounded-lg border ${
-                                        dark
-                                            ? "bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-100 focus:border-blue-500"
-                                            : "bg-gray-100 border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-500"
-                                    } outline-none transition-colors`}
-                                />
-                                <button
-                                    type="submit"
-                                    className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
-                                >
-                                    Register
-                                </button>
-                            </form>
+                            <RegistrationForm onClose={onClose}></RegistrationForm>
                         ) : (
-                            <form className="flex flex-col gap-4" onSubmit={submitLoginForm}>
-                                <input
-                                    type="email"
-                                    placeholder="Email"
-                                    value={loginForm.email}
-                                    onChange={(e) =>
-                                        setLoginForm({ ...loginForm, email: e.target.value })
-                                    }
-                                    className={`p-3 rounded-lg border ${
-                                        dark
-                                            ? "bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-100 focus:border-blue-500"
-                                            : "bg-gray-100 border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-500"
-                                    } outline-none transition-colors`}
-                                />
-                                <input
-                                    type="password"
-                                    placeholder="Password"
-                                    value={loginForm.password}
-                                    onChange={(e) =>
-                                        setLoginForm({ ...loginForm, password: e.target.value })
-                                    }
-                                    className={`p-3 rounded-lg border ${
-                                        dark
-                                            ? "bg-gray-700 border-gray-600 placeholder-gray-400 text-gray-100 focus:border-blue-500"
-                                            : "bg-gray-100 border-gray-300 placeholder-gray-500 text-gray-900 focus:border-blue-500"
-                                    } outline-none transition-colors`}
-                                />
-                                <button
-                                    type="submit"
-                                    className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
-                                >
-                                    Login
-                                </button>
-                            </form>
+                            <LoginForm onClose={onClose}></LoginForm>
                         )}
                     </div>
                 </motion.div>

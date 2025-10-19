@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,11 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppIdentityDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("IdentityConnection")));
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(x =>
+{
+    return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis"));
+});
 
 
 builder.Services.AddIdentityCore<AppUser>()
@@ -39,6 +45,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddScoped<IJWTService, JWTService>();
 builder.Services.AddScoped<IAdsRepository, AdsRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
 builder.Services.AddCors(opt =>
 {

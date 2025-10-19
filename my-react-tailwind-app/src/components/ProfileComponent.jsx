@@ -44,13 +44,18 @@ export default function ProfileComponent() {
         })();
     }, []);
 
+    useEffect(() => {
+        (async() => {
+            await fetchAds(pagination);
+        })()
+    }, [pagination]);
+
     const logout = () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("displayName");
         localStorage.removeItem("pictureUrl");
         window.location.href = "/";
     };
-
 
     const fetchAds = async (params = {}) => {
         const query = new URLSearchParams({
@@ -68,12 +73,6 @@ export default function ProfileComponent() {
             console.log('smth went wrong')
         }
     }
-
-    useEffect(() => {
-        (async() => {
-            await fetchAds(pagination);
-        })()
-    }, [pagination]);
 
     const removeAd = async (adId) => {
         if (!confirm("Delete ad?")) return;

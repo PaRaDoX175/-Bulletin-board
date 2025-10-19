@@ -1,14 +1,25 @@
 import {useEffect, useState} from "react";
-import { Phone, Mail, Trash2 } from "lucide-react";
+import { Phone, Mail, Trash2, Heart } from "lucide-react";
 import {jwtDecode} from "jwt-decode";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMantineColorScheme } from "@mantine/core";
+import api from "../interceptors/tokenValidity.interceptor.jsx";
 
-export default function AdCard({ ad, onDelete }) {
+export default function AdCard({ ad, onDelete, favorites }) {
     const [showContact, setShowContact] = useState(false);
     const [userId, setUserId] = useState('');
     const { colorScheme } = useMantineColorScheme();
+    const [isFavorite, setIsFavorite] = useState(false);
     const dark = colorScheme === "dark";
+    const baseUrl = 'http://localhost:5197/api/basket';
+    const favoriteItem = {
+        id: ad.id,
+        name: ad.title,
+        price: ad.price,
+        description: ad.description,
+        city: ad.location,
+        image: ad.image
+    }
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken')
@@ -18,6 +29,23 @@ export default function AdCard({ ad, onDelete }) {
         }
         else setUserId('')
     }, [])
+
+    useEffect(() => {
+        setIsFavorite(favorites.some(user => user.id === ad.id) ?? false)
+    }, [ad.id, favorites]);
+
+    const addToFavorites = async () => {
+        const data = await api.post(`${baseUrl}/add_item`, favoriteItem)
+        setIsFavorite(true)
+        console.log(await data.data)
+    }
+
+    const removeFromFavorites = async () => {
+        const req = await api.delete(`${baseUrl}/remove_item?basketItemId=${ad.id}`)
+        setIsFavorite(false)
+        favorites = favorites.filter(x => x.id !== ad.id)
+        console.log(req.data)
+    }
 
     return (
         <>
@@ -31,21 +59,44 @@ export default function AdCard({ ad, onDelete }) {
                         : "bg-white border-gray-200 text-gray-800"
                 }`}
             >
-                {ad.image ? (
-                    <img
-                        src={ad.image}
-                        alt={ad.title}
-                        className="w-full h-48 object-cover"
-                    />
-                ) : (
-                    <div
-                        className={`w-full h-48 grid place-items-center text-sm ${
-                            dark ? "bg-gray-800 text-gray-500" : "bg-gray-100 text-gray-400"
-                        }`}
-                    >
-                        No image
+                <div className="relative">
+                    <div className="absolute right-[5%] top-[7%]">
+                        {userId !== ad.userId && (
+                            isFavorite ? (
+                                <div
+                                    className="w-10 h-10 rounded-4xl bg-white/25 flex items-center justify-center"
+                                    onClick={removeFromFavorites}
+                                >
+                                    <Heart className="w-6 h-6 text-blue-600 fill-current" />
+                                </div>
+                            ) : (
+                                <div
+                                    className="w-10 h-10 rounded-4xl bg-black/25 flex items-center justify-center"
+                                    onClick={addToFavorites}
+                                >
+                                    <Heart className="w-6 h-6 text-white" />
+                                </div>
+                            )
+                        )}
+
                     </div>
-                )}
+                    {ad.image ? (
+                        <img
+                            src={ad.image}
+                            alt={ad.title}
+                            className="w-full h-48 object-cover"
+                        />
+                    ) : (
+                        <div
+                            className={`w-full h-48 grid place-items-center text-sm ${
+                                dark ? "bg-gray-800 text-gray-500" : "bg-gray-100 text-gray-400"
+                            }`}
+                        >
+                            No image
+                        </div>
+                    )}
+                </div>
+
 
                 <div className="p-5 flex flex-col flex-1">
                     <div className="flex justify-between items-start mb-2">
@@ -105,8 +156,8 @@ export default function AdCard({ ad, onDelete }) {
                                 </button>
                             )}
                             <span className={dark ? "text-gray-500" : "text-gray-500"}>
-                {new Date(ad.date).toLocaleDateString('ru-RU')}
-              </span>
+                                {new Date(ad.date).toLocaleDateString('ru-RU')}
+                            </span>
                         </div>
                     </div>
                 </div>

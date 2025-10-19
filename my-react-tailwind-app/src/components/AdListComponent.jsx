@@ -1,12 +1,34 @@
 import AdCard from "./AdCard.jsx";
 import Pagination from "./Pagination.jsx";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {motion, AnimatePresence} from "framer-motion";
 import {useMantineColorScheme} from "@mantine/core";
+import api from "../interceptors/tokenValidity.interceptor.jsx";
+import {jwtDecode} from "jwt-decode";
 
 export default function AdListComponent({ ads, removeAd, pagination, setPagination, totalCount, isMine }) {
     const { colorScheme } = useMantineColorScheme();
     const dark = colorScheme === "dark";
+    const [favorites, setFavorites] = useState([]);
+    const l = localStorage.getItem('accessToken')
+
+
+    const getFavorites = async () => {
+        const req = await api.get('http://localhost:5197/api/basket/get_basket')
+        setFavorites(await req.data.items);
+    }
+
+    useEffect(() => {
+        (async () => {
+            await getFavorites();
+        })()
+    }, [favorites, l]);
+
+    useEffect(() => {
+        (async () => {
+            await getFavorites();
+        })()
+    }, [])
 
     return (
         <>
@@ -30,7 +52,7 @@ export default function AdListComponent({ ads, removeAd, pagination, setPaginati
                                 No ads found.
                             </div>
                         ) : (
-                            ads.map((ad) => <AdCard key={ad.id} ad={ad} onDelete={() => removeAd(ad.id)} />)
+                            ads.map((ad) => <AdCard key={ad.id} ad={ad} onDelete={() => removeAd(ad.id)} favorites={favorites} />)
                         )}
                     </motion.div>
                 </AnimatePresence>
@@ -41,20 +63,6 @@ export default function AdListComponent({ ads, removeAd, pagination, setPaginati
                     totalCount={totalCount}
                 />
             </>
-
-            {/*<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">*/}
-            {/*    {ads.length === 0 ? (*/}
-            {/*        <div className="col-span-full text-center py-12 text-gray-600 bg-white rounded shadow">*/}
-            {/*            No ads found.*/}
-            {/*        </div>*/}
-            {/*    ) : (*/}
-            {/*        ads.map((ad) => (*/}
-            {/*            <AdCard key={ad.id} ad={ad} onDelete={() => removeAd(ad.id)} />*/}
-            {/*        ))*/}
-            {/*    )}*/}
-            {/*</div>*/}
-
-            {/*<Pagination pagination={pagination} setPagination={setPagination} totalCount={totalCount}></Pagination>*/}
         </>
     )
 }

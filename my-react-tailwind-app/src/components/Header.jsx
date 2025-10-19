@@ -5,7 +5,7 @@ import { ModalContext } from "../contexts/ModalContext.jsx";
 import { isJwtValid } from "../utils/isJwtValid.js";
 import { useMantineColorScheme } from "@mantine/core";
 
-export default function Header({ saveOpenCreate }) {
+export default function Header({ saveOpenCreate, showCreate = true }) {
     const { openCreate, openAuthentication } = useContext(ModalContext);
     const navigate = useNavigate();
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
@@ -39,12 +39,18 @@ export default function Header({ saveOpenCreate }) {
                 </div>
 
                 <div className="hidden md:flex items-center gap-3">
-                    <button
-                        onClick={() => openCreate(saveOpenCreate)}
-                        className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow-md hover:scale-[1.03] active:scale-[0.98] transition-all duration-300"
-                    >
-                        <Plus size={18} /> Create
-                    </button>
+                    <Link to="/favorites">
+                        <button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow-md hover:scale-[1.03] active:scale-[0.98] transition-all duration-300">fav</button>
+                    </Link>
+                    {showCreate && (
+                        <button
+                            onClick={() => openCreate(saveOpenCreate)}
+                            className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow-md hover:scale-[1.03] active:scale-[0.98] transition-all duration-300"
+                        >
+                            <Plus size={18} /> Create
+                        </button>
+                    )}
+
 
                     <button
                         onClick={() => toggleColorScheme()}

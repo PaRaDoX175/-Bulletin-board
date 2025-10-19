@@ -8,10 +8,12 @@ import AuthenticateComponent from "./components/AuthenticateComponent.jsx";
 import {ModalProvider} from "./contexts/ModalContext.jsx";
 import {MantineProvider} from "@mantine/core";
 import {useHotkeys, useLocalStorage} from "@mantine/hooks";
+import Favorites from "./components/Favorites.jsx";
 
 const router = createBrowserRouter([
     { path: '/', element: <App/> },
-    { path: '/profile', element: <ProfileComponent/>}
+    { path: '/profile', element: <ProfileComponent/>},
+    { path: '/favorites', element: <Favorites/> }
 ])
 
 function Root() {

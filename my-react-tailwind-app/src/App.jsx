@@ -17,8 +17,6 @@ import {motion, AnimatePresence} from "framer-motion";
 
 export default function App() {
   const [ads, setAds] = useState([]);
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
   const baseUrl = 'http://localhost:5197/api'
   const [totalCount, setTotalCount] = useState(0);
   const [pagination, setPagination] = useState({
@@ -31,9 +29,8 @@ export default function App() {
       maxPrice: ''
   })
   const [isMine, setIsMine] = useState(false)
-
-    const { colorScheme } = useMantineColorScheme();
-    const dark = colorScheme === "dark";
+  const { colorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
 
   const { openCreate, openAuthentication } = useContext(ModalContext)
 

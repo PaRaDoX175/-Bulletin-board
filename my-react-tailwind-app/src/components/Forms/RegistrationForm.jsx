@@ -16,8 +16,6 @@ export default function RegistrationForm({ onClose }) {
     })
 
     const submitRegForm = async (data) => {
-
-
         const response = await fetch('http://localhost:5197/api/account/register', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},

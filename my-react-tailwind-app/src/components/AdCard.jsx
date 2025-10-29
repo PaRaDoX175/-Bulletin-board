@@ -47,6 +47,7 @@ export default function AdCard({ ad, onDelete, favorites }) {
         console.log(req.data)
     }
 
+
     return (
         <>
             <motion.div
@@ -61,8 +62,8 @@ export default function AdCard({ ad, onDelete, favorites }) {
             >
                 <div className="relative">
                     <div className="absolute right-[5%] top-[7%]">
-                        {userId !== ad.userId && (
-                            isFavorite ? (
+                        {userId !== ad.userId &&
+                            (isFavorite ? (
                                 <div
                                     className="w-10 h-10 rounded-4xl bg-white/25 flex items-center justify-center"
                                     onClick={removeFromFavorites}
@@ -76,9 +77,7 @@ export default function AdCard({ ad, onDelete, favorites }) {
                                 >
                                     <Heart className="w-6 h-6 text-white" />
                                 </div>
-                            )
-                        )}
-
+                            ))}
                     </div>
                     {ad.image ? (
                         <img
@@ -97,11 +96,12 @@ export default function AdCard({ ad, onDelete, favorites }) {
                     )}
                 </div>
 
-
                 <div className="p-5 flex flex-col flex-1">
                     <div className="flex justify-between items-start mb-2">
                         <div>
-                            <h3 className="font-semibold text-lg leading-tight">{ad.title}</h3>
+                            <h3 className="font-semibold text-lg leading-tight">
+                                {ad.title}
+                            </h3>
                             <p
                                 className={`text-sm ${
                                     dark ? "text-gray-400" : "text-gray-600"
@@ -141,24 +141,26 @@ export default function AdCard({ ad, onDelete, favorites }) {
                             Contact
                         </button>
 
-                        <div className="flex items-center gap-2 text-xs">
-                            {ad.userId === userId && (
-                                <button
-                                    onClick={() => onDelete(ad.id)}
-                                    className={`p-2 rounded-md transition-colors ${
-                                        dark
-                                            ? "text-red-400 hover:text-red-300 hover:bg-gray-800"
-                                            : "text-red-500 hover:text-red-700 hover:bg-gray-100"
-                                    }`}
-                                    title="Delete ad"
-                                >
-                                    <Trash2 size={16} />
-                                </button>
-                            )}
-                            <span className={dark ? "text-gray-500" : "text-gray-500"}>
-                                {new Date(ad.date).toLocaleDateString('ru-RU')}
-                            </span>
-                        </div>
+                        {ad.userId === userId && (
+                            <button
+                                onClick={() => onDelete(ad.id)}
+                                className={`p-2 rounded-md transition-colors ${
+                                    dark
+                                        ? "text-red-400 hover:text-red-300 hover:bg-gray-800"
+                                        : "text-red-500 hover:text-red-700 hover:bg-gray-100"
+                                }`}
+                                title="Delete ad"
+                            >
+                                <Trash2 size={16} />
+                            </button>
+                        )}
+                    </div>
+
+                    {/* 📅 Дата объявления — вынесена отдельно ниже */}
+                    <div className="mt-3 text-xs text-left">
+            <span className={dark ? "text-gray-500" : "text-gray-500"}>
+              {new Date(ad.date).toLocaleDateString("ru-RU")}
+            </span>
                     </div>
                 </div>
             </motion.div>
